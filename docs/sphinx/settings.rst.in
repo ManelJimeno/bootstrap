@@ -1,0 +1,10 @@
+Settings classes
+=================
+
+Settings
+-------
+.. doxygenclass:: project_library::Settings
+   :project: @CMAKE_PROJECT_NAME@
+   :members:
+   :protected-members:
+   :private-members:
