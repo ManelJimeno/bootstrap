@@ -37,9 +37,11 @@ set(CONAN_PACKAGES
     libiconv/1.17
     pcre2/10.40
     sqlite3/3.39.3
-    poco/1.12.2
+    poco/1.12.4
     doxygen/1.9.4
     gtest/cci.20210126
+    openssl/1.1.1q
+    libpq/14.2
     qt/6.3.1)
 
 set(CONAN_PACKAGES_TO_FIND Poco)
