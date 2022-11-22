@@ -37,6 +37,8 @@ Param(
     [switch]$doTest,
     [Alias('c')]
     [string]$conanRemote,
+    [Alias('d')]
+    [switch]$remove_entry,
     [Alias('e')]
     [switch]$loadVS,
     [Parameter()]
@@ -56,6 +58,7 @@ function show_help
     Write-Output "   -t execute the test.`n"
     Write-Output "   -e load VS environment.`n"
     Write-Output "   -c add a conan remote.`n"
+    Write-Output "   -d used with the above option, removes the entry in the Conan remote entry.`n"
     Write-Output "   -h show this help.`n"
 }
 
