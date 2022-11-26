@@ -44,6 +44,10 @@ set(CONAN_PACKAGES
     libpq/14.2
     qt/6.3.1)
 
+if(LINUX)
+    list(APPEND CONAN_PACKAGES expat/2.5.0)
+endif()
+
 set(CONAN_PACKAGES_TO_FIND Poco)
 set(CONAN_BUILD_OPTIONS *:shared=True xapian-core:shared=False libelf:shared=False)
 if(APPLE)
