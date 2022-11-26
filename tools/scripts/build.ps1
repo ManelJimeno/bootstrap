@@ -35,10 +35,8 @@ Param(
     [Parameter()]
     [Alias('t')]
     [switch]$doTest,
-    [Alias('c')]
-    [string]$conanRemote,
-    [Alias('d')]
-    [switch]$remove_entry,
+    [Alias('u')]
+    [switch]$uploadRemote,
     [Alias('e')]
     [switch]$loadVS,
     [Parameter()]
@@ -57,8 +55,7 @@ function show_help
     Write-Output "   -i build the installer.`n"
     Write-Output "   -t execute the test.`n"
     Write-Output "   -e load VS environment.`n"
-    Write-Output "   -c add a conan remote.`n"
-    Write-Output "   -d used with the above option, removes the entry in the Conan remote entry.`n"
+    Write-Output "   -u upload libraries to remote conan server.`n"
     Write-Output "   -h show this help.`n"
 }
 
@@ -98,21 +95,11 @@ function RunCommand
 
 }
 
-Invoke-Expression "conan config set general.revisions_enabled=True"
+conan config set general.revisions_enabled=True
 
 if ($IsWindows)
 {
     conan config set general.use_always_short_paths=True
-}
-conan config set general.revisions_enabled=True
-
-if ($conanRemote)
-{
-    if ($remove_entry)
-    {
-        conan remote remove custom-conan
-    }
-    conan remote add -i 0 custom-conan $conanRemote False
 }
 
 $orginalFolder = $( Get-Location ).Path
@@ -153,7 +140,6 @@ elseif ($IsWindows)
 {
     Write-Host("This script is running under windows`n$( $PSVersionTable.OS )`n") -ForegroundColor Green
     $operatingSystem = "windows"
-    Invoke-Expression "conan config set general.use_always_short_paths=True"
     $options += "-DCMAKE_CXX_COMPILER=cl "
     if ($loadVS)
     {
@@ -181,6 +167,12 @@ try
             -file "./configure_cmake.log"
     }
 
+	if ($uploadRemote)
+	{
+		conan upload "*" --all -r custom-conan -c
+	}
+
+
     RunCommand -description "Building" `
         -command "cmake --build $buildPrefix/$workFolder" `
         -file "./build.log"
@@ -204,8 +196,3 @@ catch
 }
 
 Set-Location $orginalFolder
-
-if ($conanRemote)
-{
-    conan upload "*" --all -r custom-conan -c
-}

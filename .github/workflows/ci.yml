@@ -29,22 +29,28 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ windows-2019, ubuntu-latest ]
+        os: [ windows-2019, ubuntu-latest, macos-latest ]
     runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Install Deps
+      - name: Install Deps windows & linux
+        if: matrix.os != 'macos-latest'
         run: pip install -r build_requirements.txt
+      - name: Install Deps mac os
+        if: matrix.os == 'macos-latest'
+        run: pip3 install -r build_requirements.txt
+      - name: Config conan server
+        run: |
+            conan config set general.revisions_enabled=True
+            conan remote add -i 0 custom-conan ${{secrets.CONAN_REMOTE}} False
+            conan user -r custom-conan -p ${{secrets.CONAN_PASSWORD}} ${{secrets.CONAN_LOGIN_USERNAME}}
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1.12.0
         with:
           arch: amd64
           vsversion: 2019
       - name: Build & Test
-        env:
-          CONAN_PASSWORD: ${{secrets.CONAN_PASSWORD}}
-          CONAN_LOGIN_USERNAME: ${{secrets.CONAN_LOGIN_USERNAME}}
-        run: ./tools/scripts/build.ps1 -t -r -i -c ${{secrets.CONAN_REMOTE}}
+        run: ./tools/scripts/build.ps1 -r -u
         shell: pwsh
