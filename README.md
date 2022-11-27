@@ -1,4 +1,7 @@
+![workflow](https://github.com/maneljimeno/bootstrap/actions/workflows/ci.yml/badge.svg)
 [![GPLv3 License](https://img.shields.io/badge/license-MIT-blue?style=flat)](/LICENSE)
+
+
 # Bootstrap
 A template with a bootstrap C++ project that uses CMake and Conan.
 It includes:
