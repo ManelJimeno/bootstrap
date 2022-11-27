@@ -43,14 +43,25 @@ jobs:
         run: pip3 install -r build_requirements.txt
       - name: Config conan server
         run: |
-            conan config set general.revisions_enabled=True
-            conan remote add -i 0 custom-conan ${{secrets.CONAN_REMOTE}} False
-            conan user -r custom-conan -p ${{secrets.CONAN_PASSWORD}} ${{secrets.CONAN_LOGIN_USERNAME}}
+          conan config set general.revisions_enabled=True
+          conan remote add -i 0 custom-conan ${{secrets.CONAN_REMOTE}} False
+          conan user -r custom-conan -p ${{secrets.CONAN_PASSWORD}} ${{secrets.CONAN_LOGIN_USERNAME}}
       - name: Enable Developer Command Prompt
+        if: matrix.os == 'windows-2019'
         uses: ilammy/msvc-dev-cmd@v1.12.0
         with:
           arch: amd64
           vsversion: 2019
       - name: Build & Test
-        run: ./tools/scripts/build.ps1 -r -u
+        run: ./tools/scripts/build.ps1 -r -u -t
         shell: pwsh
+      - name: Create install
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        run: ./tools/scripts/build.ps1 -r -i
+        shell: pwsh
+      - name: Create a release
+        if: ${{ startsWith(github.ref, 'refs/tags/') && matrix.os == 'windows-2019' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./out/build/release/bootstrap*.*

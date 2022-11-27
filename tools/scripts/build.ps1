@@ -149,7 +149,7 @@ elseif ($IsWindows)
     }
 }
 
-$workFolder = "$operatingSystem-$($buildType.ToLower() )"
+$workFolder = "$($buildType.ToLower() )"
 
 if ($requirements)
 {
@@ -168,10 +168,10 @@ try
             -file "./configure_cmake.log"
     }
 
-	if ($uploadRemote)
-	{
-		conan upload "*" --all -r custom-conan -c
-	}
+    if ($uploadRemote)
+    {
+        conan upload "*" --all -r custom-conan -c
+    }
 
 
     RunCommand -description "Building" `
