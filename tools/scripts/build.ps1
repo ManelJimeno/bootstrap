@@ -134,13 +134,14 @@ if ($IsLinux)
 elseif ($IsMacOS)
 {
     Write-Host("This script is running under macOS`n$( $PSVersionTable.OS )`n") -ForegroundColor Green
+    $options += "-DCMAKE_TOOLS_BUILD_DOC=OFF "
     $operatingSystem = "macos"
 }
 elseif ($IsWindows)
 {
     Write-Host("This script is running under windows`n$( $PSVersionTable.OS )`n") -ForegroundColor Green
     $operatingSystem = "windows"
-    $options += "-DCMAKE_CXX_COMPILER=cl "
+    $options += "-DCMAKE_CXX_COMPILER=cl -DCMAKE_TOOLS_BUILD_DOC=OFF "
     if ($loadVS)
     {
         . $programPath\Set-VsEnvironment.ps1
