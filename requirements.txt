@@ -1,7 +1,7 @@
 black
 breathe
 cmakelang
-conan
+conan==1.59.0
 editorconfig-checker
 pre-commit
 sphinx

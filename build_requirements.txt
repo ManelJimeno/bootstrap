@@ -1,4 +1,4 @@
 breathe
-conan
+conan==1.59.0
 ninja
 sphinx
